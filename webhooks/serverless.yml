@@ -1,0 +1,33 @@
+service: webhooks
+
+provider:
+  name: azure
+  region: West US 2
+  runtime: nodejs12
+
+
+plugins:
+  - serverless-azure-functions
+package:
+  exclude:
+    - local.settings.json
+    - .vscode/**
+
+functions:
+  always-succeeds:
+    handler: src/handlers/alwaysSucceeds.processEvent
+    events:
+      - http: true
+        x-azure-settings:
+          methods:
+            - POST
+          authLevel: anonymous
+
+  sometimes-fails:
+    handler: src/handlers/sometimesFails.processEvent
+    events:
+      - http: true
+        x-azure-settings:
+          methods:
+            - POST
+          authLevel: anonymous
